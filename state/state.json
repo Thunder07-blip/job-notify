@@ -2,13 +2,13 @@
   "schema_version": 1,
   "companies": {},
   "last_poll_at": null,
-  "last_success_at": null,
-  "last_heartbeat_at": null,
-  "consecutive_failures": 0,
-  "consecutive_login_failures": 0,
+  "last_success_at": "2026-10-22T18:31:31.254327+05:30",
+  "last_heartbeat_at": "2026-10-22T18:31:31.254327+05:30",
+  "consecutive_failures": 1,
+  "consecutive_login_failures": 1,
   "alert_sent": false,
   "login_stopped": false,
   "pause_until": null,
-  "telegram_offset": 0,
+  "telegram_offset": 75461869,
   "first_run_done": false
 }
