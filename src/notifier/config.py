@@ -39,7 +39,7 @@ PORTAL_USERNAME = os.environ.get("PORTAL_USERNAME", "")
 PORTAL_PASSWORD = os.environ.get("PORTAL_PASSWORD", "")
 TELEGRAM_BOT_TOKEN = os.environ.get("TELEGRAM_BOT_TOKEN", "")
 TELEGRAM_CHAT_ID = os.environ.get("TELEGRAM_CHAT_ID", "")
-GMAIL_ADDRESS = os.environ.get("GMAIL_ADDRESS", "")
+GMAIL_ADDRESS = os.environ.get("GMAIL_ADDRESS") or os.environ.get("GMAIL_ADRESS", "")
 GMAIL_APP_PASSWORD = os.environ.get("GMAIL_APP_PASSWORD", "")
 NOTIFY_EMAIL_TO = os.environ.get("NOTIFY_EMAIL_TO", "")
 
