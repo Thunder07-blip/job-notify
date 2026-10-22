@@ -1,14 +1,122 @@
 {
   "schema_version": 1,
-  "companies": {},
-  "last_poll_at": null,
-  "last_success_at": "2026-10-22T18:31:31.254327+05:30",
+  "companies": {
+    "5869": {
+      "id": 5869,
+      "company": "CITI",
+      "company_code": "CITI2026-273",
+      "placementtype": "Industrial Training",
+      "maxPackage": "0.0",
+      "minPackage": "0.0",
+      "tpoprogram": "['VIT-BTech-Computer Engineering', 'VIIT-BTech-Mechanical Engineering', 'VU-Bachelor of Technology - Artificial Intelligence and Data Science', 'VU-BTech-Mechanical Engineering', 'VIT-BTech-Instrumentation and Control Engineering', 'VIT-BTech-Information Technology', 'VIT-BTech-Mechanical Engineering', 'VIIT-BTech-Computer Engineering', 'VIT-B.Tech. Computer Science and Artificial Intelligence', 'VU-Bachelor of Technology - Computer Science and Engineering - Artificial Intilligence and Machine Learning', 'VIIT-BTech-Information Technology', 'VU-BTech-Artificial Intelligence & Data Science', 'VU-Bachelor of Technology -Computer Science and Engineering - Artificial Intilligence', 'VIIT-BTech-Civil Engineering', 'VIT-BTech-Production Engineering', 'VIT-BTech-Electronics and Telecommunication Engg', 'VU-BTech-Computer Engineering', 'VIIT-null', 'VIT-BTech-Chemical Engineering', 'VIT-BTech-Computer Science and Engineering (Artificial Intelligence)', 'VU-null', 'VIT-BTech - Computer Science and Engineering (Artificial Intelligence and Machine Learning)', 'VIT-BTech-Artificial Intelligence & Data Science', 'VU-Bachelor of Technology - Computer Science and Engineering', 'VIIT-BTech-Electronics and Telecommunication Engg', 'VIIT-Engineering and Applied Science-Engineering and Applied Science']",
+      "academicyear": "2026-27",
+      "isactive": true,
+      "form_start": "2026-09-23T16:06:00+05:30",
+      "deadline": "2026-09-24T12:30:00+05:30",
+      "notifs": {
+        "new_announced": [
+          "email",
+          "telegram"
+        ],
+        "registration_open": [
+          "telegram"
+        ]
+      }
+    },
+    "5952": {
+      "id": 5952,
+      "company": "Cummins India",
+      "company_code": "CUMMINSINDIA2026-271",
+      "placementtype": "Internship + Performance based PPO",
+      "maxPackage": "25000.0",
+      "minPackage": "25000.0",
+      "tpoprogram": "['VIT-BTech-Computer Engineering', 'VIT-BTech - Computer Science and Engineering (Artificial Intelligence and Machine Learning)', 'VIT-BTech-Artificial Intelligence & Data Science', 'VIT-BTech-Electronics and Telecommunication Engg', 'VIT-B.Tech. Computer Science and Artificial Intelligence', 'VIT-BTech-Instrumentation and Control Engineering', 'VIT-null', 'VIT-BTech-Information Technology', 'VIT-BTech-Computer Science and Engineering (Artificial Intelligence)', 'VIT-BTech-Mechanical Engineering']",
+      "academicyear": "2026-27",
+      "isactive": true,
+      "form_start": "2026-10-13T11:31:00+05:30",
+      "deadline": "2026-10-14T11:00:00+05:30",
+      "notifs": {
+        "new_announced": [
+          "email",
+          "telegram"
+        ],
+        "registration_open": [
+          "telegram"
+        ]
+      }
+    },
+    "5971": {
+      "id": 5971,
+      "company": "Cummins India",
+      "company_code": "CUMMINSINDIA2026-272",
+      "placementtype": "Internship + Performance based PPO",
+      "maxPackage": "25000.0",
+      "minPackage": "25000.0",
+      "tpoprogram": "['VIT-BTech-Computer Engineering', 'VIT-BTech - Computer Science and Engineering (Artificial Intelligence and Machine Learning)', 'VIT-BTech-Artificial Intelligence & Data Science', 'VIT-BTech-Electronics and Telecommunication Engg', 'VIT-B.Tech. Computer Science and Artificial Intelligence', 'VIT-BTech-Instrumentation and Control Engineering', 'VIT-null', 'VIT-BTech-Information Technology', 'VIT-BTech-Computer Science and Engineering (Artificial Intelligence)', 'VIT-BTech-Mechanical Engineering']",
+      "academicyear": "2026-27",
+      "isactive": true,
+      "form_start": null,
+      "deadline": null,
+      "notifs": {
+        "new_announced": [
+          "email",
+          "telegram"
+        ]
+      }
+    },
+    "5969": {
+      "id": 5969,
+      "company": "Eaton",
+      "company_code": "EN2026-274",
+      "placementtype": "Internship + Performance based PPO",
+      "maxPackage": "10.0",
+      "minPackage": "10.0",
+      "tpoprogram": "['VIT-BTech-Computer Engineering', 'VIT-BTech - Computer Science and Engineering (Artificial Intelligence and Machine Learning)', 'VIT-BTech-Artificial Intelligence & Data Science', 'VIT-BTech-Electronics and Telecommunication Engg', 'VIT-B.Tech. Computer Science and Artificial Intelligence', 'VIT-BTech-Instrumentation and Control Engineering', 'VIT-null', 'VIT-BTech-Information Technology', 'VIT-BTech-Computer Science and Engineering (Artificial Intelligence)']",
+      "academicyear": "2026-27",
+      "isactive": true,
+      "form_start": "2026-10-15T14:16:00+05:30",
+      "deadline": "2026-10-16T10:00:00+05:30",
+      "notifs": {
+        "new_announced": [
+          "email",
+          "telegram"
+        ],
+        "registration_open": [
+          "telegram"
+        ]
+      }
+    },
+    "5985": {
+      "id": 5985,
+      "company": "Valentius Kryptix",
+      "company_code": "VALENTIUS KRYPTIX2026-271",
+      "placementtype": "Internship",
+      "maxPackage": "0.0",
+      "minPackage": "0.0",
+      "tpoprogram": "['VIT-BTech-Computer Engineering', 'VIT-BTech-Electronics and Telecommunication Engg', 'VU-BTech-Computer Engineering', 'VIIT-null', 'VIT-BTech-Computer Science and Engineering (Artificial Intelligence)', 'VIT-BTech-Information Technology', 'VU-null', 'VIT-BTech - Computer Science and Engineering (Artificial Intelligence and Machine Learning)', 'VIT-BTech-Artificial Intelligence & Data Science', 'VIT-B.Tech. Computer Science and Artificial Intelligence', 'VIIT-BTech-Computer Engineering', 'VIIT-BTech-Electronics and Telecommunication Engg', 'VIIT-BTech-Information Technology', 'VU-BTech-Artificial Intelligence & Data Science', 'VU-Bachelor of Technology -Computer Science and Engineering - Artificial Intilligence']",
+      "academicyear": "2026-27",
+      "isactive": true,
+      "form_start": "2026-10-21T10:46:00+05:30",
+      "deadline": "2026-10-21T16:53:00+05:30",
+      "notifs": {
+        "new_announced": [
+          "email",
+          "telegram"
+        ],
+        "registration_open": [
+          "telegram"
+        ]
+      }
+    }
+  },
+  "last_poll_at": "2026-10-22T18:42:37.037674+05:30",
+  "last_success_at": "2026-10-22T18:42:37.037674+05:30",
   "last_heartbeat_at": "2026-10-22T18:31:31.254327+05:30",
-  "consecutive_failures": 1,
-  "consecutive_login_failures": 1,
+  "consecutive_failures": 0,
+  "consecutive_login_failures": 0,
   "alert_sent": false,
   "login_stopped": false,
   "pause_until": null,
   "telegram_offset": 75461869,
-  "first_run_done": false
+  "first_run_done": true
 }
