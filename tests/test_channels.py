@@ -129,6 +129,19 @@ class TestEmailSending:
         assert email_channel._parse_recipients("") == []
         assert email_channel._parse_recipients("invalid_email") == []
 
+    def test_send_via_resend_success(self, monkeypatch):
+        """Test successful send via Resend API."""
+        monkeypatch.setattr(config, "RESEND_API_KEY", "re_test_123")
+        monkeypatch.setattr(config, "NOTIFY_EMAIL_TO", "test@vit.edu")
+
+        mock_resp = MagicMock()
+        mock_resp.status = 200
+        mock_resp.__enter__.return_value = mock_resp
+
+        with patch("urllib.request.urlopen", return_value=mock_resp):
+            result = email_channel._send_via_resend("Test Sub", "Plain", "<p>HTML</p>", "BEGIN:VCALENDAR...")
+        assert result is True
+
 
 class TestICSGeneration:
     """Tests for ICS calendar file generation."""

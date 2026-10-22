@@ -42,6 +42,8 @@ TELEGRAM_CHAT_ID = os.environ.get("TELEGRAM_CHAT_ID", "")
 GMAIL_ADDRESS = os.environ.get("GMAIL_ADDRESS") or os.environ.get("GMAIL_ADRESS", "")
 GMAIL_APP_PASSWORD = os.environ.get("GMAIL_APP_PASSWORD", "")
 NOTIFY_EMAIL_TO = os.environ.get("NOTIFY_EMAIL_TO", "")
+RESEND_API_KEY = os.environ.get("RESEND_API_KEY", "")
+RESEND_FROM = os.environ.get("RESEND_FROM", "Job Notify <onboarding@resend.dev>")
 
 # ── Program Filtering ────────────────────────────────────────────────────────
 # Comma-separated list of program strings to match against tpoprogram.

@@ -102,6 +102,65 @@ def send_test() -> bool:
 
 # ── Internal helpers ──────────────────────────────────────────────────────────
 
+def _send_via_resend(
+    subject: str,
+    plain_body: str,
+    html_body: str,
+    ics_content: Optional[str] = None,
+) -> bool:
+    """Send an email via Resend REST API."""
+    import base64
+    import json
+    import urllib.request
+    import urllib.error
+
+    recipients = _parse_recipients(config.NOTIFY_EMAIL_TO)
+    if not recipients:
+        logger.error("Resend: No valid recipient found in NOTIFY_EMAIL_TO")
+        return False
+
+    payload: dict = {
+        "from": config.RESEND_FROM,
+        "to": recipients,
+        "subject": subject,
+        "html": html_body,
+        "text": plain_body,
+    }
+
+    if ics_content:
+        payload["attachments"] = [
+            {
+                "filename": "event.ics",
+                "content": base64.b64encode(ics_content.encode("utf-8")).decode("utf-8"),
+            }
+        ]
+
+    try:
+        req = urllib.request.Request(
+            "https://api.resend.com/emails",
+            data=json.dumps(payload).encode("utf-8"),
+            headers={
+                "Authorization": f"Bearer {config.RESEND_API_KEY}",
+                "Content-Type": "application/json",
+                "User-Agent": config.USER_AGENT,
+            },
+            method="POST",
+        )
+        with urllib.request.urlopen(req, timeout=30) as resp:
+            if resp.status in (200, 201):
+                logger.info("Email sent via Resend to %s: %s", ", ".join(recipients), subject)
+                return True
+            logger.error("Resend API returned status %d", resp.status)
+            return False
+    except urllib.error.HTTPError as e:
+        body = e.read().decode("utf-8", errors="replace")
+        logger.error("Resend API HTTP error %d: %s", e.code, body)
+        return False
+    except Exception as e:
+        logger.error("Failed to send email via Resend: %s", e)
+        return False
+
+
 def _send_email(
     subject: str,
     plain_body: str,
@@ -109,10 +168,13 @@ def _send_email(
     ics_content: Optional[str] = None,
 ) -> bool:
     """
-    Send an email via Gmail SMTP.
+    Send an email via Resend API (if configured) or Gmail SMTP.
 
     Returns True on success, False on failure (logged, not raised).
     """
+    if config.RESEND_API_KEY:
+        return _send_via_resend(subject, plain_body, html_body, ics_content)
+
     recipients = _parse_recipients(config.NOTIFY_EMAIL_TO)
     if not config.GMAIL_ADDRESS or not config.GMAIL_APP_PASSWORD or not recipients:
         logger.error("Email not configured: missing GMAIL_ADDRESS, GMAIL_APP_PASSWORD, or valid NOTIFY_EMAIL_TO")
