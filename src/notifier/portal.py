@@ -139,8 +139,19 @@ def fetch_companies(
 
                 # Step 6: Navigate to dashboard (or check if we're already there)
                 logger.info("Navigating to dashboard")
-                page.goto(config.PORTAL_DASHBOARD_URL, timeout=config.BROWSER_TIMEOUT_MS)
-                page.wait_for_load_state("networkidle", timeout=config.RESPONSE_TIMEOUT_MS)
+                try:
+                    # In Vue SPA, clicking the sidebar link performs smooth client-side routing
+                    page.wait_for_selector('a[href="/company-dashboard"]', timeout=10_000, state="attached")
+                    page.click('a[href="/company-dashboard"]', force=True)
+                    logger.debug("Clicked dashboard nav item")
+                except Exception as e:
+                    logger.warning("Could not click sidebar link, falling back to goto: %s", e)
+                    page.goto(config.PORTAL_DASHBOARD_URL, timeout=config.BROWSER_TIMEOUT_MS)
+
+                try:
+                    page.wait_for_load_state("networkidle", timeout=config.RESPONSE_TIMEOUT_MS)
+                except Exception:
+                    pass
 
                 # Step 7: Check if we're actually on the dashboard (login might have failed)
                 _verify_on_dashboard(page)
@@ -297,11 +308,15 @@ def _fill_login(page) -> None:
     if not submitted:
         raise LoginFailed("Could not find login submit button")
 
-    # Wait for navigation after login
+    # Wait for navigation after login (portal redirects to /home)
+    try:
+        page.wait_for_url("**/home*", timeout=15_000)
+    except Exception:
+        pass
     try:
         page.wait_for_load_state("networkidle", timeout=config.BROWSER_TIMEOUT_MS)
     except Exception:
-        pass  # might already have navigated
+        pass
 
 
 def _check_for_blockers(page) -> None:
@@ -357,9 +372,8 @@ def _verify_on_dashboard(page) -> None:
         if marker.lower() in page_text:
             raise SessionPage(f"Detected '{marker}' after login attempt")
 
-    # If URL is still the login page and not the dashboard
-    if "company-dashboard" not in current_url:
-        # Check if there are login-related elements still visible
+    # If URL is still the login page and not the dashboard or home
+    if "company-dashboard" not in current_url and "/home" not in current_url:
         for selector in config.PASSWORD_SELECTORS:
             el = page.query_selector(selector)
             if el and el.is_visible():
