@@ -18,6 +18,14 @@ on:
         description: 'Force a portal poll regardless of schedule'
         type: boolean
         default: false
+      demo_notify:
+        description: 'Send realistic demo company notification (preview format)'
+        type: boolean
+        default: false
+      test_notify:
+        description: 'Send a test ping notification to all channels'
+        type: boolean
+        default: false
 
 # Prevent overlapping runs – only one portal session at a time
 concurrency:
@@ -72,12 +80,17 @@ jobs:
           PYTHONPATH: src
         run: |
           ARGS=""
-          if [ "${{ github.event.inputs.force_poll }}" = "true" ]; then
+          if [ "${{ github.event.inputs.demo_notify }}" = "true" ]; then
+            ARGS="--demo-notify"
+          elif [ "${{ github.event.inputs.test_notify }}" = "true" ]; then
+            ARGS="--test-notify"
+          elif [ "${{ github.event.inputs.force_poll }}" = "true" ]; then
             ARGS="--force-poll"
           fi
           python -m notifier.main $ARGS
 
       - name: Commit state changes
+        if: success()
         run: |
           git config user.name "job-notify-bot"
           git config user.email "bot@job-notify.local"
@@ -94,3 +107,62 @@ jobs:
               sleep 2
             done
           fi
+
+      - name: Notify on workflow failure
+        if: failure()
+        env:
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+          RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
+          NOTIFY_EMAIL_TO: ${{ secrets.NOTIFY_EMAIL_TO }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: |
+          python -c "
+          import os, urllib.request, json, re
+
+          token = os.environ.get('TELEGRAM_BOT_TOKEN')
+          chat_id = os.environ.get('TELEGRAM_CHAT_ID')
+          resend_key = os.environ.get('RESEND_API_KEY')
+          email_to_raw = os.environ.get('NOTIFY_EMAIL_TO', '')
+          run_url = os.environ.get('RUN_URL', '')
+
+          cleaned = re.sub(r'\s+and\s+', ',', email_to_raw, flags=re.IGNORECASE)
+          recipients = [t.strip() for t in re.split(r'[,;\s]+', cleaned) if '@' in t]
+
+          msg_plain = f'⚠️ [Job Notify] GitHub Actions Workflow Failed!\n\nThe portal check workflow failed. Please inspect the logs:\n{run_url}'
+          msg_html = f'<b>⚠️ [Job Notify] GitHub Actions Workflow Failed!</b><br><br>The portal check workflow failed. Please inspect the logs:<br><a href=\"{run_url}\">{run_url}</a>'
+
+          # Send Telegram
+          if token and chat_id:
+              try:
+                  req = urllib.request.Request(
+                      f'https://api.telegram.org/bot{token}/sendMessage',
+                      data=json.dumps({'chat_id': chat_id, 'text': msg_html, 'parse_mode': 'HTML'}).encode(),
+                      headers={'Content-Type': 'application/json'},
+                      method='POST'
+                  )
+                  urllib.request.urlopen(req, timeout=15)
+                  print('Workflow failure alert sent to Telegram')
+              except Exception as e:
+                  print('Failed to send Telegram alert:', e)
+
+          # Send Email via Resend
+          if resend_key and recipients:
+              try:
+                  req = urllib.request.Request(
+                      'https://api.resend.com/emails',
+                      data=json.dumps({
+                          'from': 'Job Notify <onboarding@resend.dev>',
+                          'to': recipients,
+                          'subject': '[Placement Alert] GitHub Actions Workflow Failed',
+                          'text': msg_plain,
+                          'html': f'<html><body><p><strong>⚠️ GitHub Actions Workflow Failed!</strong></p><p>The placement check workflow encountered an error.</p><p><a href=\"{run_url}\">View Run Logs on GitHub</a></p></body></html>'
+                      }).encode(),
+                      headers={'Authorization': f'Bearer {resend_key}', 'Content-Type': 'application/json'},
+                      method='POST'
+                  )
+                  urllib.request.urlopen(req, timeout=15)
+                  print('Workflow failure alert sent to Resend email')
+              except Exception as e:
+                  print('Failed to send Resend email alert:', e)
+          " || true

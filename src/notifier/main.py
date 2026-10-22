@@ -12,6 +12,7 @@ This module implements the tick/poll architecture:
 CLI flags:
   --dry-run           Print notifications without sending; don't write state.
   --test-notify       Send a test notification to every channel.
+  --demo-notify       Send a realistic sample company notification (preview mode).
   --announce-existing Announce existing companies on first run.
   --force-poll        Force a portal poll regardless of schedule.
   --local-debug       Run browser in headed mode (local dev only).
@@ -44,14 +45,48 @@ logger = logging.getLogger(__name__)
 def main() -> int:
     """
     Main entry point. Returns 0 on success, 1 on failure.
+
+    Wrapped in a top-level safety net: any unhandled exception is caught,
+    logged, and reported on both Telegram and email so nothing is ever silent.
     """
     args = parse_args()
     setup_logging(args.dry_run)
 
-    logger.info("=== Job Notify Tick ===")
+    try:
+        return _run(args)
+    except Exception as e:
+        # ── Top-level crash handler ───────────────────────────────────────
+        # This is a last resort — catches anything _run() didn't handle.
+        import traceback
+        tb = traceback.format_exc()
+        logger.critical("UNHANDLED CRASH: %s\n%s", e, tb)
+        crash_msg = (
+            f"🔴 CRITICAL: Job Notify crashed unexpectedly.\n"
+            f"Error: {type(e).__name__}: {e}\n"
+            f"Check workflow logs for full traceback."
+        )
+        # Best-effort alert on both channels — never raise from here
+        try:
+            telegram_channel.send_alert(crash_msg)
+        except Exception as te:
+            logger.error("Could not send crash alert to Telegram: %s", te)
+        try:
+            email_channel.send_alert(crash_msg)
+        except Exception as ee:
+            logger.error("Could not send crash alert to email: %s", ee)
+        return 1
 
+
+def _run(args: argparse.Namespace) -> int:
+    """Core tick logic, separated from main() so the crash handler wraps it cleanly."""
     now = datetime.now(config.IST)
+
+    logger.info("=== Job Notify Tick ===")
     logger.info("Current time: %s IST", now.strftime("%Y-%m-%d %H:%M:%S"))
+
+    # ── Demo-notify mode ──────────────────────────────────────────────────
+    if args.demo_notify:
+        return _handle_demo_notify()
 
     # ── Test-notify mode ──────────────────────────────────────────────────
     if args.test_notify:
@@ -342,12 +377,14 @@ def _handle_poll_failure(
 
     logger.error("Poll failure #%d, class=%s: %s", failures, failure_class, error)
 
-    # Send alert on third consecutive failure
-    if failures >= config.CONSECUTIVE_FAILURES_ALERT and not state.get("alert_sent"):
+    # Immediate alert for blocking issues (CAPTCHA/OTP, Session lock) or after consecutive failure threshold
+    is_urgent = failure_class in ("LOGIN_BLOCKED", "SESSION_PAGE")
+    if (is_urgent or failures >= config.CONSECUTIVE_FAILURES_ALERT) and not state.get("alert_sent"):
         alert_msg = (
-            f"Portal scraper has failed {failures} times consecutively.\n"
-            f"Failure class: {failure_class}\n"
-            "Please check the workflow logs."
+            f"Portal scraper issue detected:\n"
+            f"Class: {failure_class} (Attempt #{failures})\n"
+            f"Error: {error}\n"
+            "Please check the GitHub workflow logs or portal status."
         )
         if not dry_run:
             _send_alert(alert_msg)
@@ -357,15 +394,27 @@ def _handle_poll_failure(
 
 
 def _send_alert(message: str) -> None:
-    """Send alert on all channels."""
-    email_channel.send_alert(message)
-    telegram_channel.send_alert(message)
+    """Send alert on ALL channels. Each channel failure is logged but does not block others."""
+    for channel_name, send_fn in [
+        ("email", lambda: email_channel.send_alert(message)),
+        ("telegram", lambda: telegram_channel.send_alert(message)),
+    ]:
+        try:
+            send_fn()
+        except Exception as e:
+            logger.error("Failed to send alert on %s: %s", channel_name, e)
 
 
 def _send_recovery(message: str) -> None:
-    """Send recovery on all channels."""
-    email_channel.send_recovery(message)
-    telegram_channel.send_recovery(message)
+    """Send recovery on ALL channels. Each channel failure is logged but does not block others."""
+    for channel_name, send_fn in [
+        ("email", lambda: email_channel.send_recovery(message)),
+        ("telegram", lambda: telegram_channel.send_recovery(message)),
+    ]:
+        try:
+            send_fn()
+        except Exception as e:
+            logger.error("Failed to send recovery on %s: %s", channel_name, e)
 
 
 def _handle_test_notify(args: argparse.Namespace) -> int:
@@ -393,6 +442,53 @@ def _handle_test_notify(args: argparse.Namespace) -> int:
         return 1
 
 
+def _handle_demo_notify() -> int:
+    """
+    Handle --demo-notify flag.
+
+    Sends a realistic sample company notification on ALL channels
+    so you can see exactly what a real placement alert looks like.
+    The company details are fake but formatted identically to a live alert.
+    """
+    from datetime import timedelta
+    from zoneinfo import ZoneInfo
+
+    IST = ZoneInfo("Asia/Kolkata")
+    now = datetime.now(IST)
+
+    demo_company = Company(
+        id=9999,
+        company="Google India Pvt. Ltd.",
+        company_code="GOOGLE2026-DEMO",
+        placementtype="Full Time",
+        maxPackage="45.0",
+        minPackage="32.0",
+        tpoprogram="VIT-BTech-Computer Engineering, VIT-BTech-Information Technology, "
+                   "VIT-BTech-Computer Science and Engineering (Artificial Intelligence)",
+        academicyear="2026-27",
+        isactive=True,
+        form_start=now + timedelta(hours=2),
+        deadline=now + timedelta(days=3),
+    )
+
+    logger.info("Sending DEMO company notification (not a real listing)...")
+
+    email_ok = email_channel.send_new_company(demo_company)
+    telegram_ok = telegram_channel.send_new_company(demo_company)
+
+    if email_ok:
+        logger.info("✅ Demo email sent")
+    else:
+        logger.error("❌ Demo email FAILED")
+
+    if telegram_ok:
+        logger.info("✅ Demo Telegram sent")
+    else:
+        logger.error("❌ Demo Telegram FAILED")
+
+    return 0 if (email_ok and telegram_ok) else 1
+
+
 def parse_args() -> argparse.Namespace:
     """Parse command-line arguments."""
     parser = argparse.ArgumentParser(
@@ -407,7 +503,12 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--test-notify",
         action="store_true",
-        help="Send a test notification to every channel.",
+        help="Send a simple test ping to every channel.",
+    )
+    parser.add_argument(
+        "--demo-notify",
+        action="store_true",
+        help="Send a realistic sample company alert so you can preview the real email format.",
     )
     parser.add_argument(
         "--announce-existing",

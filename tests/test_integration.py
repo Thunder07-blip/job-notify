@@ -335,3 +335,34 @@ class TestStateRoundTrip:
         from notifier.state import is_notified
         assert is_notified(state2, 1, "new_announced", "email")
         assert not is_notified(state2, 1, "new_announced", "telegram")
+
+
+class TestMainErrorHandling:
+    """Tests for CLI flags and error safety net in main."""
+
+    @patch("notifier.channels.email.send_new_company", return_value=True)
+    @patch("notifier.channels.telegram.send_new_company", return_value=True)
+    def test_demo_notify(self, mock_tg, mock_email):
+        """--demo-notify triggers sample company alerts on both channels."""
+        from notifier.main import main
+        with patch("sys.argv", ["notifier", "--demo-notify"]):
+            exit_code = main()
+            assert exit_code == 0
+            assert mock_email.called
+            assert mock_tg.called
+
+    @patch("notifier.main._run", side_effect=RuntimeError("Unexpected catastrophic error"))
+    @patch("notifier.channels.telegram.send_alert")
+    @patch("notifier.channels.email.send_alert")
+    def test_crash_safety_net(self, mock_email_alert, mock_tg_alert, mock_run):
+        """Top-level main() intercepts unhandled exceptions and notifies both channels."""
+        from notifier.main import main
+        with patch("sys.argv", ["notifier"]):
+            exit_code = main()
+            assert exit_code == 1
+            assert mock_tg_alert.called
+            assert mock_email_alert.called
+            # Verify the alert message contains the critical notification
+            call_args = mock_tg_alert.call_args[0][0]
+            assert "CRITICAL" in call_args
+            assert "RuntimeError" in call_args
