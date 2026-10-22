@@ -20,7 +20,7 @@ Runs unattended on GitHub Actions at zero cost for ~2 years.
 │                                                                      │
 │  1. Load state/state.json                                            │
 │  2. Handle Telegram commands (/pause /resume /status)                │
-│  3. Is poll due? (POLL_TIMES_IST: 08:00–22:00 every 2h)             │
+│  3. Is poll due? (POLL_TIMES_IST: day every 2h, night every 4h)      │
 │        YES → portal.py (Playwright)                                  │
 │           └─ Login → Dashboard → Capture API response               │
 │           └─ Parse → Diff → Detect changes                          │
@@ -43,7 +43,7 @@ Runs unattended on GitHub Actions at zero cost for ~2 years.
 
 ### Tick vs Poll
 - **Tick** (every 30 min): Load state → Telegram commands → reminders → heartbeat → save
-- **Poll** (every 2h, 08:00–22:00 IST): Open Chromium → login → capture API response → diff → notify → logout
+- **Poll** (Day: every 2h from 08:00–22:00 IST; Night: every 4h at 02:00, 06:00 IST): Open Chromium → login → capture API response → diff → notify → logout
 
 ---
 

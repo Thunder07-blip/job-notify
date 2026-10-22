@@ -53,10 +53,11 @@ PROGRAM_FILTERS: list[str] = [f.strip() for f in _raw_filters.split(",") if f.st
 FILTER_ENABLED: bool = bool(PROGRAM_FILTERS)
 
 # ── Poll Schedule (IST) ──────────────────────────────────────────────────────
+# Day: every 2h (08:00–22:00). Night: every 4h (02:00, 06:00).
 # Format: comma-separated HH:MM times in IST.
 _raw_poll_times = os.environ.get(
     "POLL_TIMES_IST",
-    "08:00,10:00,12:00,14:00,16:00,18:00,20:00,22:00"
+    "02:00,06:00,08:00,10:00,12:00,14:00,16:00,18:00,20:00,22:00"
 )
 POLL_TIMES_IST: list[str] = [t.strip() for t in _raw_poll_times.split(",") if t.strip()]
 

@@ -199,6 +199,6 @@ Override defaults with environment variables in your workflow secrets:
 | Variable | Default | Description |
 |----------|---------|-------------|
 | `PROGRAM_FILTERS` | `VIT-BTech-Computer Engineering` | Comma-separated programs to monitor. Empty = all. |
-| `POLL_TIMES_IST` | `08:00,10:00,...,22:00` | Comma-separated IST times to poll. |
+| `POLL_TIMES_IST` | `02:00,06:00,08:00,...,22:00` | Comma-separated IST times to poll (day every 2h, night every 4h). |
 | `POLL_GRACE_WINDOW_SECONDS` | `2100` (35 min) | Grace window for delayed GitHub crons. |
 | `HEARTBEAT_INTERVAL_HOURS` | `168` (7 days) | How often to send the alive heartbeat. |
