@@ -298,7 +298,11 @@ def _fill_login(page) -> None:
         try:
             el = page.query_selector(selector)
             if el and el.is_visible():
-                el.click()
+                try:
+                    with page.expect_response(lambda r: "login/process" in r.url, timeout=30_000):
+                        el.click()
+                except Exception:
+                    el.click()
                 submitted = True
                 logger.debug("Login submitted using selector: %s", selector)
                 break
@@ -310,7 +314,7 @@ def _fill_login(page) -> None:
 
     # Wait for navigation after login (portal redirects to /home)
     try:
-        page.wait_for_url("**/home*", timeout=15_000)
+        page.wait_for_url("**/home*", timeout=25_000)
     except Exception:
         pass
     try:
