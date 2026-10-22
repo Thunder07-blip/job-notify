@@ -110,10 +110,10 @@
     }
   },
   "last_poll_at": "2026-10-22T18:42:37.037674+05:30",
-  "last_success_at": "2026-10-22T19:36:42.528358+05:30",
+  "last_success_at": "2026-10-22T19:50:58.781470+05:30",
   "last_heartbeat_at": "2026-10-22T18:31:31.254327+05:30",
-  "consecutive_failures": 0,
-  "consecutive_login_failures": 0,
+  "consecutive_failures": 1,
+  "consecutive_login_failures": 1,
   "alert_sent": false,
   "login_stopped": false,
   "pause_until": null,
