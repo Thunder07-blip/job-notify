@@ -1,0 +1,94 @@
+# Job Notify – Portal Check Workflow
+#
+# Runs every 30 minutes as a "tick". The notifier internally decides
+# whether to do a full portal poll based on POLL_TIMES_IST.
+#
+# NOTE: GitHub Actions scheduled runs may be delayed by several minutes.
+# The grace window in config.py handles this.
+
+name: Portal Check
+
+on:
+  schedule:
+    # Every 30 minutes – GitHub may delay these by a few minutes
+    - cron: '*/30 * * * *'
+  workflow_dispatch:
+    inputs:
+      force_poll:
+        description: 'Force a portal poll regardless of schedule'
+        type: boolean
+        default: false
+
+# Prevent overlapping runs – only one portal session at a time
+concurrency:
+  group: portal-check
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: 'pip'
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Cache Playwright browsers
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-${{ runner.os }}-${{ hashFiles('requirements.txt') }}
+          restore-keys: |
+            playwright-${{ runner.os }}-
+
+      - name: Install Playwright Chromium
+        run: python -m playwright install --with-deps chromium
+
+      - name: Run notifier
+        env:
+          PORTAL_USERNAME: ${{ secrets.PORTAL_USERNAME }}
+          PORTAL_PASSWORD: ${{ secrets.PORTAL_PASSWORD }}
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+          GMAIL_ADDRESS: ${{ secrets.GMAIL_ADDRESS }}
+          GMAIL_APP_PASSWORD: ${{ secrets.GMAIL_APP_PASSWORD }}
+          NOTIFY_EMAIL_TO: ${{ secrets.NOTIFY_EMAIL_TO }}
+          PYTHONPATH: src
+        run: |
+          ARGS=""
+          if [ "${{ github.event.inputs.force_poll }}" = "true" ]; then
+            ARGS="--force-poll"
+          fi
+          python -m notifier.main $ARGS
+
+      - name: Commit state changes
+        run: |
+          git config user.name "job-notify-bot"
+          git config user.email "bot@job-notify.local"
+          git add state/state.json
+          if git diff --cached --quiet; then
+            echo "No state changes to commit"
+          else
+            git commit -m "[skip ci] Update state $(date -u +%Y-%m-%dT%H:%M:%SZ)"
+            # Retry push with rebase on conflict
+            for i in 1 2 3; do
+              git push && break
+              echo "Push failed, rebasing and retrying ($i/3)..."
+              git pull --rebase
+              sleep 2
+            done
+          fi

@@ -1,0 +1,41 @@
+# Virtual environment
+.venv/
+venv/
+env/
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+
+# Pytest
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Playwright
+# NEVER commit screenshots, traces, HAR files, or browser artifacts
+playwright-report/
+test-results/
+*.png
+*.webm
+*.zip
+*.har
+
+# Editor
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# macOS
+.DS_Store
+
+# Environment files (NEVER commit secrets)
+.env
+.env.*
+
+# The 'a.txt' credential file (should be deleted!)
+a.txt

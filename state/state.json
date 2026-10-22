@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "companies": {},
+  "last_poll_at": null,
+  "last_success_at": null,
+  "last_heartbeat_at": null,
+  "consecutive_failures": 0,
+  "consecutive_login_failures": 0,
+  "alert_sent": false,
+  "login_stopped": false,
+  "pause_until": null,
+  "telegram_offset": 0,
+  "first_run_done": false
+}
