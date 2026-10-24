@@ -88,7 +88,7 @@
     }
   },
   "last_poll_at": "2026-10-22T18:42:37.037674+05:30",
-  "last_success_at": "2026-10-24T23:30:31.433176+05:30",
+  "last_success_at": "2026-10-25T02:36:43.289679+05:30",
   "last_heartbeat_at": "2026-10-22T18:31:31.254327+05:30",
   "consecutive_failures": 2,
   "consecutive_login_failures": 2,
