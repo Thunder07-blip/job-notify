@@ -1,28 +1,6 @@
 {
   "schema_version": 1,
   "companies": {
-    "5869": {
-      "id": 5869,
-      "company": "CITI",
-      "company_code": "CITI2026-273",
-      "placementtype": "Industrial Training",
-      "maxPackage": "0.0",
-      "minPackage": "0.0",
-      "tpoprogram": "['VIT-BTech-Computer Engineering', 'VIIT-BTech-Mechanical Engineering', 'VU-Bachelor of Technology - Artificial Intelligence and Data Science', 'VU-BTech-Mechanical Engineering', 'VIT-BTech-Instrumentation and Control Engineering', 'VIT-BTech-Information Technology', 'VIT-BTech-Mechanical Engineering', 'VIIT-BTech-Computer Engineering', 'VIT-B.Tech. Computer Science and Artificial Intelligence', 'VU-Bachelor of Technology - Computer Science and Engineering - Artificial Intilligence and Machine Learning', 'VIIT-BTech-Information Technology', 'VU-BTech-Artificial Intelligence & Data Science', 'VU-Bachelor of Technology -Computer Science and Engineering - Artificial Intilligence', 'VIIT-BTech-Civil Engineering', 'VIT-BTech-Production Engineering', 'VIT-BTech-Electronics and Telecommunication Engg', 'VU-BTech-Computer Engineering', 'VIIT-null', 'VIT-BTech-Chemical Engineering', 'VIT-BTech-Computer Science and Engineering (Artificial Intelligence)', 'VU-null', 'VIT-BTech - Computer Science and Engineering (Artificial Intelligence and Machine Learning)', 'VIT-BTech-Artificial Intelligence & Data Science', 'VU-Bachelor of Technology - Computer Science and Engineering', 'VIIT-BTech-Electronics and Telecommunication Engg', 'VIIT-Engineering and Applied Science-Engineering and Applied Science']",
-      "academicyear": "2026-27",
-      "isactive": true,
-      "form_start": "2026-09-23T16:06:00+05:30",
-      "deadline": "2026-09-24T12:30:00+05:30",
-      "notifs": {
-        "new_announced": [
-          "email",
-          "telegram"
-        ],
-        "registration_open": [
-          "telegram"
-        ]
-      }
-    },
     "5952": {
       "id": 5952,
       "company": "Cummins India",
@@ -110,7 +88,7 @@
     }
   },
   "last_poll_at": "2026-10-22T18:42:37.037674+05:30",
-  "last_success_at": "2026-10-24T11:52:51.511243+05:30",
+  "last_success_at": "2026-10-24T16:58:38.785279+05:30",
   "last_heartbeat_at": "2026-10-22T18:31:31.254327+05:30",
   "consecutive_failures": 1,
   "consecutive_login_failures": 1,
