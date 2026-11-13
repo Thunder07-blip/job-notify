@@ -1,28 +1,6 @@
 {
   "schema_version": 1,
   "companies": {
-    "5952": {
-      "id": 5952,
-      "company": "Cummins India",
-      "company_code": "CUMMINSINDIA2026-271",
-      "placementtype": "Internship + Performance based PPO",
-      "maxPackage": "25000.0",
-      "minPackage": "25000.0",
-      "tpoprogram": "['VIT-BTech-Computer Engineering', 'VIT-BTech - Computer Science and Engineering (Artificial Intelligence and Machine Learning)', 'VIT-BTech-Artificial Intelligence & Data Science', 'VIT-BTech-Electronics and Telecommunication Engg', 'VIT-B.Tech. Computer Science and Artificial Intelligence', 'VIT-BTech-Instrumentation and Control Engineering', 'VIT-null', 'VIT-BTech-Information Technology', 'VIT-BTech-Computer Science and Engineering (Artificial Intelligence)', 'VIT-BTech-Mechanical Engineering']",
-      "academicyear": "2026-27",
-      "isactive": true,
-      "form_start": "2026-10-13T11:31:00+05:30",
-      "deadline": "2026-10-14T11:00:00+05:30",
-      "notifs": {
-        "new_announced": [
-          "email",
-          "telegram"
-        ],
-        "registration_open": [
-          "telegram"
-        ]
-      }
-    },
     "5971": {
       "id": 5971,
       "company": "Cummins India",
@@ -88,7 +66,7 @@
     }
   },
   "last_poll_at": "2026-10-22T18:42:37.037674+05:30",
-  "last_success_at": "2026-11-13T06:54:02.385308+05:30",
+  "last_success_at": "2026-11-13T14:08:57.542721+05:30",
   "last_heartbeat_at": "2026-11-13T06:54:02.385308+05:30",
   "consecutive_failures": 2,
   "consecutive_login_failures": 2,
