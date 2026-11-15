@@ -20,28 +20,6 @@
         ]
       }
     },
-    "5969": {
-      "id": 5969,
-      "company": "Eaton",
-      "company_code": "EN2026-274",
-      "placementtype": "Internship + Performance based PPO",
-      "maxPackage": "10.0",
-      "minPackage": "10.0",
-      "tpoprogram": "['VIT-BTech-Computer Engineering', 'VIT-BTech - Computer Science and Engineering (Artificial Intelligence and Machine Learning)', 'VIT-BTech-Artificial Intelligence & Data Science', 'VIT-BTech-Electronics and Telecommunication Engg', 'VIT-B.Tech. Computer Science and Artificial Intelligence', 'VIT-BTech-Instrumentation and Control Engineering', 'VIT-null', 'VIT-BTech-Information Technology', 'VIT-BTech-Computer Science and Engineering (Artificial Intelligence)']",
-      "academicyear": "2026-27",
-      "isactive": true,
-      "form_start": "2026-10-15T14:16:00+05:30",
-      "deadline": "2026-10-16T10:00:00+05:30",
-      "notifs": {
-        "new_announced": [
-          "email",
-          "telegram"
-        ],
-        "registration_open": [
-          "telegram"
-        ]
-      }
-    },
     "5985": {
       "id": 5985,
       "company": "Valentius Kryptix",
@@ -66,7 +44,7 @@
     }
   },
   "last_poll_at": "2026-10-22T18:42:37.037674+05:30",
-  "last_success_at": "2026-11-15T06:44:09.286875+05:30",
+  "last_success_at": "2026-11-15T13:50:08.243361+05:30",
   "last_heartbeat_at": "2026-11-13T06:54:02.385308+05:30",
   "consecutive_failures": 2,
   "consecutive_login_failures": 2,
