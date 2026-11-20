@@ -19,32 +19,10 @@
           "telegram"
         ]
       }
-    },
-    "5985": {
-      "id": 5985,
-      "company": "Valentius Kryptix",
-      "company_code": "VALENTIUS KRYPTIX2026-271",
-      "placementtype": "Internship",
-      "maxPackage": "0.0",
-      "minPackage": "0.0",
-      "tpoprogram": "['VIT-BTech-Computer Engineering', 'VIT-BTech-Electronics and Telecommunication Engg', 'VU-BTech-Computer Engineering', 'VIIT-null', 'VIT-BTech-Computer Science and Engineering (Artificial Intelligence)', 'VIT-BTech-Information Technology', 'VU-null', 'VIT-BTech - Computer Science and Engineering (Artificial Intelligence and Machine Learning)', 'VIT-BTech-Artificial Intelligence & Data Science', 'VIT-B.Tech. Computer Science and Artificial Intelligence', 'VIIT-BTech-Computer Engineering', 'VIIT-BTech-Electronics and Telecommunication Engg', 'VIIT-BTech-Information Technology', 'VU-BTech-Artificial Intelligence & Data Science', 'VU-Bachelor of Technology -Computer Science and Engineering - Artificial Intilligence']",
-      "academicyear": "2026-27",
-      "isactive": true,
-      "form_start": "2026-10-21T10:46:00+05:30",
-      "deadline": "2026-10-21T16:53:00+05:30",
-      "notifs": {
-        "new_announced": [
-          "email",
-          "telegram"
-        ],
-        "registration_open": [
-          "telegram"
-        ]
-      }
     }
   },
   "last_poll_at": "2026-10-22T18:42:37.037674+05:30",
-  "last_success_at": "2026-11-20T14:32:33.950716+05:30",
+  "last_success_at": "2026-11-20T23:34:21.225646+05:30",
   "last_heartbeat_at": "2026-11-20T14:32:33.950716+05:30",
   "consecutive_failures": 2,
   "consecutive_login_failures": 2,
